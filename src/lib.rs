@@ -3,11 +3,11 @@ use serde_yaml::Value as Yaml;
 use serde_json::Value as Json;
 
 pub trait ToSerdeJson {
-    fn yaml_to_json(self) -> Json;
+    fn to_serde_json(self) -> Json;
 }
 
 impl ToSerdeJson for serde_yaml::Value {
-    fn yaml_to_json(self) -> serde_json::Value {
+    fn to_serde_json(self) -> serde_json::Value {
         match self {
             Yaml::Null => Json::Null,
             Yaml::Bool(b) => Json::Bool(b),
@@ -35,7 +35,7 @@ impl ToSerdeJson for serde_yaml::Value {
                         Yaml::String(s) => s.to_string(),
                         _ => unreachable!(),
                     };
-                    ret.insert(key, ToSerdeJson::yaml_to_json(value));
+                    ret.insert(key, ToSerdeJson::to_serde_json(value));
                 }
                 Json::Object(ret)
             }
